@@ -1,0 +1,10 @@
+{% extends "base.html" %} {% block title %}Air Quality Forecast{% endblock %} {% block content
+%}
+
+{% for key,value in form_data.items() %}
+<h2> {{key}}</h2>
+<p> {{value}}</p>
+{% endfor %}
+
+
+{% endblock %}
