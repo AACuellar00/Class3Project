@@ -1,0 +1,90 @@
+{% extends "base.html" %} {% block title %}Enter Your Location{% endblock %} {% block content
+%}
+
+<div align="center">Air Quality for the monitoring station closest to you, {{data.station}}, is {{data.aq}}</div>
+<br/>
+
+ <div class="row">
+  <div id = "c1" class="column" align="center" style="background-color:#aaa;">Expected Air Quality Tomorrow: {{forecast.one_day}}</div>
+  <div id = "c2" class="column" align="center" style="background-color:#bbb;">Expected Air Quality in Two Days: {{forecast.two_day}}</div>
+  <div id = "c3" class="column" align="center" style="background-color:#ccc;">Expected Air Quality in Three Days: {{forecast.three_day}}</div>
+</div>
+
+
+
+
+       <script  type = "text/javascript">
+           const a = {{forecast["one_day"]}} ;
+           const b = {{forecast["two_day"]}} ;
+           const c = {{forecast["three_day"]}} ;
+           if (a<25)
+               document.getElementById("c1").style="background-color: rgb(0, 120, 126);";
+           else if (a<50)
+               document.getElementById("c1").style="background-color: rgb(5, 154, 101);";
+           else if (a<75)
+               document.getElementById("c1").style="background-color: rgb(133, 189, 75);";
+           else if (a<100)
+               document.getElementById("c1").style="background-color: rgb(255, 221, 51);";
+           else if (a<125)
+               document.getElementById("c1").style="background-color: rgb(255, 186, 51);";
+           else if (a<150)
+               document.getElementById("c1").style="background-color: rgb(254, 150, 51);";
+           else if (a<175)
+               document.getElementById("c1").style="background-color: rgb(228, 73, 51);";
+           else if (a<200)
+               document.getElementById("c1").style="background-color: rgb(202, 0, 53);";
+           else if (a<300)
+               document.getElementById("c1").style="background-color: rgb(151, 0, 104);";
+           else if (a<400)
+               document.getElementById("c1").style="background-color: rgb(120, 0, 63);";
+           else
+               document.getElementById("c1").style="background-color: rgb(78, 0, 22);";
+
+                      if (b<25)
+               document.getElementById("c2").style="background-color: rgb(0, 120, 126);";
+           else if (b<50)
+               document.getElementById("c2").style="background-color: rgb(5, 154, 101);";
+           else if (b<75)
+               document.getElementById("c2").style="background-color: rgb(133, 189, 75);";
+           else if (b<100)
+               document.getElementById("c2").style="background-color: rgb(255, 221, 51);";
+           else if (b<125)
+               document.getElementById("c2").style="background-color: rgb(255, 186, 51);";
+           else if (b<150)
+               document.getElementById("c2").style="background-color: rgb(254, 150, 51);";
+           else if (b<175)
+               document.getElementById("c2").style="background-color: rgb(228, 73, 51);";
+           else if (b<200)
+               document.getElementById("c2").style="background-color: rgb(202, 0, 53);";
+           else if (b<300)
+               document.getElementById("c2").style="background-color: rgb(151, 0, 104);";
+           else if (b<400)
+               document.getElementById("c2").style="background-color: rgb(120, 0, 63);";
+           else
+               document.getElementById("c2").style="background-color: rgb(78, 0, 22);";
+
+                      if (c<25)
+               document.getElementById("c3").style="background-color: rgb(0, 120, 126);";
+           else if (c<50)
+               document.getElementById("c3").style="background-color: rgb(5, 154, 101);";
+           else if (c<75)
+               document.getElementById("c3").style="background-color: rgb(133, 189, 75);";
+           else if (c<100)
+               document.getElementById("c3").style="background-color: rgb(255, 221, 51);";
+           else if (c<125)
+               document.getElementById("c3").style="background-color: rgb(255, 186, 51);";
+           else if (c<150)
+               document.getElementById("c3").style="background-color: rgb(254, 150, 51);";
+           else if (c<175)
+               document.getElementById("c3").style="background-color: rgb(228, 73, 51);";
+           else if (c<200)
+               document.getElementById("c3").style="background-color: rgb(202, 0, 53);";
+           else if (c<300)
+               document.getElementById("c3").style="background-color: rgb(151, 0, 104);";
+           else if (c<400)
+               document.getElementById("c3").style="background-color: rgb(120, 0, 63);";
+           else
+               document.getElementById("c3").style="background-color: rgb(78, 0, 22);";
+       </script>
+
+{% endblock %}
