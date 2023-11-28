@@ -12,8 +12,6 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
 
-    from src.views import views
-    from src.auth import auth
     from ..models import User
 
     with app.app_context():
