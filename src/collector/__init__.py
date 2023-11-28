@@ -3,8 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 from src.collect_data import update_all
+from .. import db
 
-db = SQLAlchemy()
 DB_NAME = "database.db"
 
 def create_app():
@@ -20,7 +20,8 @@ def create_app():
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-    update_all()
+    with app.app_context():
+        update_all()
 
     return app
 
