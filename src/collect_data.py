@@ -7,12 +7,15 @@ from .models import LocationAirQuality, User
 from .analyze_data import average_location_data
 
 load_dotenv()
-AV_KEY = os.getenv("AQI_KEY")
+
+AQI_KEY = os.getenv("AQI_KEY")
+
+
 
 
 @login_required
 def get_forecast():
-    url = (f"https://api.waqi.info/feed/geo:{current_user.latitude};{current_user.longitude}/?token={AV_KEY}")
+    url = (f"https://api.waqi.info/feed/geo:{current_user.latitude};{current_user.longitude}/?token={AQI_KEY}")
     payload = {}
     headers = {}
     response = requests.request("GET", url, headers=headers, data=payload).json()
@@ -27,7 +30,7 @@ def get_forecast():
 
 
 def get_today_aq(latitude, longitude):
-    url = (f"https://api.waqi.info/feed/geo:{latitude};{longitude}/?token={AV_KEY}")
+    url = (f"https://api.waqi.info/feed/geo:{latitude};{longitude}/?token={AQI_KEY}")
     payload = {}
     headers = {}
     response = requests.request("GET", url, headers=headers, data=payload).json()

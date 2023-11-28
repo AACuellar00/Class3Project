@@ -5,7 +5,7 @@ from flask_login import UserMixin
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(20), nullable=False)
     latitude = db.Column(db.Float(12), default=40.014984)
     longitude = db.Column(db.Float(12), default=-105.270546)
