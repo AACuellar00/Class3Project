@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 import requests
 from dotenv import load_dotenv
 import os
-from .models import LocationAirQuality
+from .models import LocationAirQuality, User
 from .analyze_data import average_location_data
 
 load_dotenv()
@@ -26,9 +26,8 @@ def get_forecast():
     return return_value
 
 
-@login_required
-def get_today_aq():
-    url = (f"https://api.waqi.info/feed/geo:{current_user.latitude};{current_user.longitude}/?token={AV_KEY}")
+def get_today_aq(latitude, longitude):
+    url = (f"https://api.waqi.info/feed/geo:{latitude};{longitude}/?token={AV_KEY}")
     payload = {}
     headers = {}
     response = requests.request("GET", url, headers=headers, data=payload).json()
@@ -50,3 +49,12 @@ def get_today_aq():
         db.session.commit()
 
     return return_value
+
+
+def update_all():
+    users = User.query.all()
+    for user in users:
+        lat = user.latitude
+        long = user.longitude
+        get_today_aq(lat, long)
+    print("Updated all locations linked to a user!")

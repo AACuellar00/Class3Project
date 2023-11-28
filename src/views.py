@@ -20,10 +20,9 @@ def home():
         form_data = request.form
         return render_template('forecast.html', form_data=form_data)
 
-    return_value = get_today_aq()
+    return_value = get_today_aq(current_user.latitude, current_user.longitude)
     data = {'aq': return_value[0], 'station': return_value[1], 'cityN': return_value[2]}
     forecast = get_forecast()
-    print(forecast)
     return render_template("home.html", user=current_user, data=data, forecast=forecast)
 
 @views.route('/settings', methods=['GET', 'POST'])

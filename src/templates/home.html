@@ -1,7 +1,8 @@
 {% extends "base.html" %} {% block title %}Enter Your Location{% endblock %} {% block content
 %}
 
-<div align="center">Air Quality for the monitoring station closest to you, {{data.station}}, is {{data.aq}}</div>
+<body onLoad="changeAllThree()">
+<div align="center">{{user.username}}, the Air Quality for the monitoring station closest to you at {{data.cityN}} is {{data.aq}}</div>
 <br/>
 
  <div class="row">
@@ -9,82 +10,73 @@
   <div id = "c2" class="column" align="center" style="background-color:#bbb;">Expected Air Quality in Two Days: {{forecast.two_day}}</div>
   <div id = "c3" class="column" align="center" style="background-color:#ccc;">Expected Air Quality in Three Days: {{forecast.three_day}}</div>
 </div>
-
-
-
+</body>
 
        <script  type = "text/javascript">
            const a = {{forecast["one_day"]}} ;
            const b = {{forecast["two_day"]}} ;
            const c = {{forecast["three_day"]}} ;
-           if (a<25)
-               document.getElementById("c1").style="background-color: rgb(0, 120, 126);";
-           else if (a<50)
-               document.getElementById("c1").style="background-color: rgb(5, 154, 101);";
-           else if (a<75)
-               document.getElementById("c1").style="background-color: rgb(133, 189, 75);";
-           else if (a<100)
-               document.getElementById("c1").style="background-color: rgb(255, 221, 51);";
-           else if (a<125)
-               document.getElementById("c1").style="background-color: rgb(255, 186, 51);";
-           else if (a<150)
-               document.getElementById("c1").style="background-color: rgb(254, 150, 51);";
-           else if (a<175)
-               document.getElementById("c1").style="background-color: rgb(228, 73, 51);";
-           else if (a<200)
-               document.getElementById("c1").style="background-color: rgb(202, 0, 53);";
-           else if (a<300)
-               document.getElementById("c1").style="background-color: rgb(151, 0, 104);";
-           else if (a<400)
-               document.getElementById("c1").style="background-color: rgb(120, 0, 63);";
-           else
-               document.getElementById("c1").style="background-color: rgb(78, 0, 22);";
-
-                      if (b<25)
-               document.getElementById("c2").style="background-color: rgb(0, 120, 126);";
-           else if (b<50)
-               document.getElementById("c2").style="background-color: rgb(5, 154, 101);";
-           else if (b<75)
-               document.getElementById("c2").style="background-color: rgb(133, 189, 75);";
-           else if (b<100)
-               document.getElementById("c2").style="background-color: rgb(255, 221, 51);";
-           else if (b<125)
-               document.getElementById("c2").style="background-color: rgb(255, 186, 51);";
-           else if (b<150)
-               document.getElementById("c2").style="background-color: rgb(254, 150, 51);";
-           else if (b<175)
-               document.getElementById("c2").style="background-color: rgb(228, 73, 51);";
-           else if (b<200)
-               document.getElementById("c2").style="background-color: rgb(202, 0, 53);";
-           else if (b<300)
-               document.getElementById("c2").style="background-color: rgb(151, 0, 104);";
-           else if (b<400)
-               document.getElementById("c2").style="background-color: rgb(120, 0, 63);";
-           else
-               document.getElementById("c2").style="background-color: rgb(78, 0, 22);";
-
-                      if (c<25)
-               document.getElementById("c3").style="background-color: rgb(0, 120, 126);";
-           else if (c<50)
-               document.getElementById("c3").style="background-color: rgb(5, 154, 101);";
-           else if (c<75)
-               document.getElementById("c3").style="background-color: rgb(133, 189, 75);";
-           else if (c<100)
-               document.getElementById("c3").style="background-color: rgb(255, 221, 51);";
-           else if (c<125)
-               document.getElementById("c3").style="background-color: rgb(255, 186, 51);";
-           else if (c<150)
-               document.getElementById("c3").style="background-color: rgb(254, 150, 51);";
-           else if (c<175)
-               document.getElementById("c3").style="background-color: rgb(228, 73, 51);";
-           else if (c<200)
-               document.getElementById("c3").style="background-color: rgb(202, 0, 53);";
-           else if (c<300)
-               document.getElementById("c3").style="background-color: rgb(151, 0, 104);";
-           else if (c<400)
-               document.getElementById("c3").style="background-color: rgb(120, 0, 63);";
-           else
-               document.getElementById("c3").style="background-color: rgb(78, 0, 22);";
+           const col1 = "c1";
+           const col2 = "c2";
+           const col3 = "c3";
+           function changeColor(forecastq,column){
+               var img = document.createElement("img");
+               document.getElementById(column).innerHTML += "<br>";
+               if (forecastq>{{user.air_quality_threshold}})
+                     document.getElementById(column).innerHTML +=
+                         "<br>The forecasted air quality is over your designated threshold.";
+                 else
+                     document.getElementById(column).innerHTML +=
+                         "<br>The forecasted air quality is under your designated threshold.";
+                document.getElementById(column).innerHTML += "<br>";
+                if (forecastq<50) {
+                    document.getElementById(column).style = "background-color: rgb(171, 227, 91);";
+                    document.getElementById(column).innerHTML += "<br>Safe levels detected.";
+                    document.getElementById(column).innerHTML += "<br>";
+                    img.src = "static/images/Green.png";
+                    document.getElementById(column).appendChild(img);
+                }
+               else if (forecastq<100) {
+                    document.getElementById(column).style = "background-color: rgb(251, 211, 75);";
+                    document.getElementById(column).innerHTML += "<br>Caution is recommended for those who are very sensitive to air pollution.";
+                    document.getElementById(column).innerHTML += "<br>";
+                    img.src = "static/images/Yellow.png";
+                    document.getElementById(column).appendChild(img);
+                }
+                else if (forecastq<150) {
+                    document.getElementById(column).style = "background-color: rgb(251, 155, 83);";
+                    document.getElementById(column).innerHTML += "<br>If you are sensitive to air pollution you should limit exposure as much as possible.";
+                    document.getElementById(column).innerHTML += "<br>";
+                    img.src = "static/images/Orange.png";
+                    document.getElementById(column).appendChild(img);
+                }
+                 else if (forecastq<200) {
+                    document.getElementById(column).style = "background-color: rgb(251, 107, 107);";
+                     document.getElementById(column).innerHTML += "<br>Everybody should limit their exposure as much as possible.";
+                    document.getElementById(column).innerHTML += "<br>";
+                    img.src = "static/images/Red.png";
+                    document.getElementById(column).appendChild(img);
+                }
+                else if (forecastq<300) {
+                    document.getElementById(column).style = "background-color: rgb(171, 123, 187);";
+                     document.getElementById(column).innerHTML += "<br>It is recommended that you don't go outside.";
+                    document.getElementById(column).innerHTML += "<br>";
+                    img.src = "static/images/Purple.png";
+                    document.getElementById(column).appendChild(img);
+                }
+                 else {
+                    document.getElementById(column).style = "background-color: rgb(171, 115, 131);";
+                    document.getElementById(column).innerHTML += "<br>It is recommended that you don't go outside.";
+                    document.getElementById(column).innerHTML += "<br>";
+                    img.src = "static/images/DarkV.png";
+                    document.getElementById(column).appendChild(img);
+                }
+              }
+              function changeAllThree(){
+                    changeColor(a,col1);
+                     changeColor(b,col2);
+                      changeColor(c,col3);
+              }
        </script>
-
+      <a href='https://pngtree.com/freepng/boy-air-quality_6845091.html'>The air quality faces were designed by HadoNguyen from pngtree.com</a>
 {% endblock %}

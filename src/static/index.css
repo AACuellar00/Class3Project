@@ -28,6 +28,8 @@ body {
 .column {
   float: left;
   width: 33.33%;
+  font-size: larger;
+  border-width: 1px;
 }
 
 @media screen and (max-width: 600px) {
