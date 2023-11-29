@@ -21,17 +21,39 @@ def home():
     forecast = get_forecast()
     return render_template("home.html", user=current_user, data=data, forecast=forecast)
 
+
 @views.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
     if request.method == 'POST':
         form_data = request.form
-        current_user.latitude = form_data.get('latitude')
-        current_user.longitude = form_data.get('longitude')
-        current_user.air_quality_threshold = form_data.get('air_quality_threshold')
+        try:
+            lat = float(form_data.get('latitude'))
+            current_user.latitude = lat
+        except ValueError:
+            flash('Invalid input for latitude.', category='error')
+            return redirect(url_for(settings.html))
+        try:
+            lon = float(form_data.get('longitude'))
+            current_user.longitude = lon
+        except ValueError:
+            flash('Invalid input for longitude.', category='error')
+            return redirect(url_for(settings.html))
+        try:
+            aqt = float(form_data.get('air_quality_threshold'))
+            if aqt >= 0:
+                current_user.current_user.air_quality_threshold = aqt
+            else:
+                flash('Negative numbers are not accepted for air quality threshold.', category='error')
+                return redirect(url_for(settings.html))
+        except ValueError:
+            flash('Invalid input for air quality threshold.', category='error')
+            return redirect(url_for(settings.html))
+
         current_user.allow_emails = (form_data.get('email_allowed') == 'Yes')
         db.session.commit()
 
         return redirect(url_for('views.home'))
-
-    return render_template('settings.html')
+    return render_template('settings.html',
+                           lat=current_user.latitude, lon=current_user.longitude,
+                           aqt=current_user.air_quality_threshold)

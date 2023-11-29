@@ -44,12 +44,12 @@ content %}
 
         <div class="form-group" >
         <label for="latitude">Latitude</label>
-            <input required type="text" class="form-control" id="latitude" name="latitude" enterkeyhint="next" />
+            <input required type="text" class="form-control" id="latitude" name="latitude" enterkeyhint="next" value={{lat}} />
       </div>
 
         <div class="form-group" >
         <label for="longitude">Longitude</label>
-            <input required type="text" class="form-control" id="longitude" name="longitude" enterkeyhint="next"/>
+            <input required type="text" class="form-control" id="longitude" name="longitude" enterkeyhint="next" value={{lon}} />
       </div>
           <br/>
 
@@ -61,6 +61,7 @@ content %}
       id="air_quality_threshold"
       name="air_quality_threshold"
       placeholder="Enter your PM 2.5 tolerance threshold."
+      value={{aqt}}
     />
   </div>
 
