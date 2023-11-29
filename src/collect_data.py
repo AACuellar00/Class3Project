@@ -34,7 +34,6 @@ def get_today_aq(latitude, longitude):
     payload = {}
     headers = {}
     response = requests.request("GET", url, headers=headers, data=payload).json()
-    print(response)
     aq = response['data']['aqi']
     idx = response['data']['idx']
     city = response['data']['city']['name']
