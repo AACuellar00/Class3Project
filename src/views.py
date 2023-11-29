@@ -1,16 +1,11 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from . import db
 from flask_login import login_required, current_user
-import requests
-from dotenv import load_dotenv
 import os
 from .collect_data import get_today_aq, get_forecast
 
-load_dotenv()
 
 views = Blueprint('views', __name__)
-
-AV_KEY = os.getenv("AV_KEY")
 
 
 @views.route('/', methods=['GET', 'POST'])
@@ -32,23 +27,23 @@ def settings():
             current_user.latitude = lat
         except ValueError:
             flash('Invalid input for latitude.', category='error')
-            return redirect(url_for(settings.html))
+            return redirect(url_for('views.settings'))
         try:
             lon = float(form_data.get('longitude'))
             current_user.longitude = lon
         except ValueError:
             flash('Invalid input for longitude.', category='error')
-            return redirect(url_for(settings.html))
+            return redirect(url_for('views.settings'))
         try:
             aqt = float(form_data.get('air_quality_threshold'))
             if aqt >= 0:
-                current_user.current_user.air_quality_threshold = aqt
+                current_user.air_quality_threshold = aqt
             else:
                 flash('Negative numbers are not accepted for air quality threshold.', category='error')
-                return redirect(url_for(settings.html))
+                return redirect(url_for('views.settings'))
         except ValueError:
             flash('Invalid input for air quality threshold.', category='error')
-            return redirect(url_for(settings.html))
+            return redirect(url_for('views.settings'))
 
         current_user.allow_emails = (form_data.get('email_allowed') == 'Yes')
         db.session.commit()

@@ -1,7 +1,6 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
   <h3 align="center">Change Settings</h3>
-   <form method="POST">
 
     <button onclick="getLocation()">Locate through geolocation (May take several seconds when pressed) </button>
     <br/>
@@ -41,6 +40,7 @@ content %}
         }
         }
     </script>
+   <form method="POST">
 
         <div class="form-group" >
         <label for="latitude">Latitude</label>
