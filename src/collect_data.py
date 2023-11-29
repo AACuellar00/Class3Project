@@ -56,8 +56,10 @@ def get_today_aq(latitude, longitude):
 
 def update_all():
     users = User.query.all()
+    print(users)
     for user in users:
         lat = user.latitude
         long = user.longitude
         get_today_aq(lat, long)
+        print(user.username)
     print("Updated all locations linked to a user!")
