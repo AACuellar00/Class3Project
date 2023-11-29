@@ -1,9 +1,16 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from . import db
 from flask_login import login_required, current_user
+import requests
+from dotenv import load_dotenv
+import os
 from .collect_data import get_today_aq, get_forecast
 
+load_dotenv()
+
 views = Blueprint('views', __name__)
+
+AV_KEY = os.getenv("AV_KEY")
 
 
 @views.route('/', methods=['GET', 'POST'])
