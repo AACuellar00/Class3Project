@@ -25,11 +25,15 @@ body {
   transform: translate(-50%,-50%);
 }
 
+.row{
+  display: flex;
+  justify-content: space-between;
+}
 .column {
-  float: left;
-  width: 33.33%;
+  flex-basis: 33.33%;
+  box-sizing: border-box;
   font-size: larger;
-  border-width: 1px;
+  border:solid;
 }
 
 @media screen and (max-width: 600px) {
