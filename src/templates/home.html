@@ -2,13 +2,12 @@
 %}
 
 <body onLoad="changeAllThree()">
-<div align="center">{{user.username}}, the Air Quality for the monitoring station closest to you at {{data.cityN}} is {{data.aq}}</div>
-<br/>
+<div class = "day" id = "today" align="center">{{user.username}}, today's air quality according to the monitoring station closest to you at {{data.cityN}} is {{data.aq}}</div>
 
  <div class="row">
-  <div id = "c1" class="column" align="center" style="background-color:#aaa;"><br>Expected Air Quality Tomorrow: {{forecast.one_day}}</div>
-  <div id = "c2" class="column" align="center" style="background-color:#bbb;"><br>Expected Air Quality in Two Days: {{forecast.two_day}}</div>
-  <div id = "c3" class="column" align="center" style="background-color:#ccc;"><br>Expected Air Quality in Three Days: {{forecast.three_day}}</div>
+  <div id = "c1" class="column" align="center" >Expected Air Quality Tomorrow: {{forecast.one_day}}</div>
+  <div id = "c2" class="column" align="center" >Expected Air Quality in Two Days: {{forecast.two_day}}</div>
+  <div id = "c3" class="column" align="center" >Expected Air Quality in Three Days: {{forecast.three_day}}</div>
     </div>
 </body>
 
@@ -16,63 +15,68 @@
            const a = {{forecast["one_day"]}} ;
            const b = {{forecast["two_day"]}} ;
            const c = {{forecast["three_day"]}} ;
+           const t = {{data.aq}};
            const col1 = "c1";
            const col2 = "c2";
            const col3 = "c3";
-           function changeColor(forecastq,column){
+           const tE = "today";
+           const thresh = {{user.air_quality_threshold}};
+           function changeColor(forecastq,element){
                var img = document.createElement("img");
-               document.getElementById(column).innerHTML += "<br>";
+               document.getElementById(element).innerHTML += "<br>";
                if (forecastq>{{user.air_quality_threshold}})
-                     document.getElementById(column).innerHTML +=
-                         "<br>The forecasted air quality is over your designated threshold.";
-                 else
-                     document.getElementById(column).innerHTML +=
-                         "<br>The forecasted air quality is under your designated threshold.";
-                document.getElementById(column).innerHTML += "<br>";
+                     document.getElementById(element).innerHTML +=
+                         "<br>This level is over your designated threshold of ";
+               else
+                     document.getElementById(element).innerHTML +=
+                         "<br>This level is under your designated threshold of ";
+                document.getElementById(element).innerHTML += thresh;
+                document.getElementById(element).innerHTML += ".<br>";
                 if (forecastq<50) {
-                    document.getElementById(column).style = "background-color: rgb(171, 227, 91);";
-                    document.getElementById(column).innerHTML += "<br>Safe levels detected.";
-                    document.getElementById(column).innerHTML += "<br>";
+                    document.getElementById(element).style = "background-color: rgb(171, 227, 91);";
+                    document.getElementById(element).innerHTML += "<br>Safe levels detected.";
+                    document.getElementById(element).innerHTML += "<br>";
                     img.src = "static/images/Green.png";
-                    document.getElementById(column).appendChild(img);
+                    document.getElementById(element).appendChild(img);
                 }
                else if (forecastq<100) {
-                    document.getElementById(column).style = "background-color: rgb(251, 211, 75);";
-                    document.getElementById(column).innerHTML += "<br>Caution is recommended for those who are very sensitive to air pollution.";
-                    document.getElementById(column).innerHTML += "<br>";
+                    document.getElementById(element).style = "background-color: rgb(251, 211, 75);";
+                    document.getElementById(element).innerHTML += "<br>Caution is recommended for those who are very sensitive to air pollution.";
+                    document.getElementById(element).innerHTML += "<br>";
                     img.src = "static/images/Yellow.png";
-                    document.getElementById(column).appendChild(img);
+                    document.getElementById(element).appendChild(img);
                 }
                 else if (forecastq<150) {
-                    document.getElementById(column).style = "background-color: rgb(251, 155, 83);";
-                    document.getElementById(column).innerHTML += "<br>If you are sensitive to air pollution you should limit exposure as much as possible.";
-                    document.getElementById(column).innerHTML += "<br>";
+                    document.getElementById(element).style = "background-color: rgb(251, 155, 83);";
+                    document.getElementById(element).innerHTML += "<br>If you are sensitive to air pollution you should limit exposure as much as possible.";
+                    document.getElementById(element).innerHTML += "<br>";
                     img.src = "static/images/Orange.png";
                     document.getElementById(column).appendChild(img);
                 }
                  else if (forecastq<200) {
-                    document.getElementById(column).style = "background-color: rgb(251, 107, 107);";
-                     document.getElementById(column).innerHTML += "<br>Everybody should limit their exposure as much as possible.";
-                    document.getElementById(column).innerHTML += "<br>";
+                    document.getElementById(element).style = "background-color: rgb(251, 107, 107);";
+                     document.getElementById(element).innerHTML += "<br>Everybody should limit their exposure as much as possible.";
+                    document.getElementById(element).innerHTML += "<br>";
                     img.src = "static/images/Red.png";
-                    document.getElementById(column).appendChild(img);
+                    document.getElementById(element).appendChild(img);
                 }
                 else if (forecastq<300) {
-                    document.getElementById(column).style = "background-color: rgb(171, 123, 187);";
-                     document.getElementById(column).innerHTML += "<br>It is recommended that you don't go outside.";
-                    document.getElementById(column).innerHTML += "<br>";
+                    document.getElementById(element).style = "background-color: rgb(171, 123, 187);";
+                     document.getElementById(element).innerHTML += "<br>It is recommended that you don't go outside.";
+                    document.getElementById(element).innerHTML += "<br>";
                     img.src = "static/images/Purple.png";
-                    document.getElementById(column).appendChild(img);
+                    document.getElementById(element).appendChild(img);
                 }
                  else {
-                    document.getElementById(column).style = "background-color: rgb(171, 115, 131);";
-                    document.getElementById(column).innerHTML += "<br>It is recommended that you don't go outside.";
-                    document.getElementById(column).innerHTML += "<br>";
+                    document.getElementById(element).style = "background-color: rgb(171, 115, 131);";
+                    document.getElementById(element).innerHTML += "<br>It is recommended that you don't go outside.";
+                    document.getElementById(element).innerHTML += "<br>";
                     img.src = "static/images/DarkV.png";
-                    document.getElementById(column).appendChild(img);
+                    document.getElementById(element).appendChild(img);
                 }
               }
               function changeAllThree(){
+                  changeColor(t,tE);
                     changeColor(a,col1);
                      changeColor(b,col2);
                       changeColor(c,col3);

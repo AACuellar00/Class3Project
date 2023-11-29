@@ -35,6 +35,14 @@ body {
   font-size: larger;
   border:solid;
 }
+.day{
+  box-sizing: border-box;
+  font-size: larger;
+  border:solid;
+}
+.setting{
+  font-size:large;
+}
 
 @media screen and (max-width: 600px) {
   .column {

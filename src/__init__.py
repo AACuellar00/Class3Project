@@ -1,8 +1,6 @@
-import os
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from os import path
+import os
 from flask_login import LoginManager
 
 db = SQLAlchemy()
@@ -10,10 +8,12 @@ DB_NAME = "database.db"
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'sdaiufhasldfjhasd'
-    app.config['SQLALCHEMY_DATABASE_URI'] = ('postgresql://cdiciireuzgfrd'
-                                             ':a29648edfc241975347522ecdc215496642e61203915bd34431dc4af79971658@ec2'
-                                             '-52-21-61-131.compute-1.amazonaws.com:5432/d46iufn0n1hobk')
+    uri = os.getenv('DATABASE_URL')
+
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    if uri and uri.startswith("postgres://"):
+        uri = uri.replace("postgres://", "postgresql://", 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = uri
 
     db.init_app(app)
 
@@ -37,7 +37,3 @@ def create_app():
         return User.query.get(int(id))
 
     return app
-
-def create_database(app):
-    if not path.exists('' + DB_NAME):
-        db.create_all(app=app)

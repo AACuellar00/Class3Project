@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
   <h3 align="center">Change Settings</h3>
-
+    <div id="setting">
     <button onclick="getLocation()">Locate through geolocation (May take several seconds when pressed) </button>
     <br/>
     <div id="geolocate"></div>
@@ -46,7 +46,7 @@ content %}
         <label for="latitude">Latitude</label>
             <input required type="text" class="form-control" id="latitude" name="latitude" enterkeyhint="next" value={{lat}} />
       </div>
-
+        <br/>
         <div class="form-group" >
         <label for="longitude">Longitude</label>
             <input required type="text" class="form-control" id="longitude" name="longitude" enterkeyhint="next" value={{lon}} />
@@ -64,7 +64,7 @@ content %}
       value={{aqt}}
     />
   </div>
-
+<br/>
   <input type="checkbox" id="email_allowed" name="email_allowed" value="Yes" >
   <label for="email_allowed">Receive a daily email about air quality levels.</label><br>
         {% if current_user.allow_emails %}
@@ -72,8 +72,9 @@ content %}
             document.getElementById('email_allowed').checked=true
        </script>
         {%endif%}
+<br/>
 
-
-  <button type="submit" class="btn btn-primary">Save entered settings.</button>
+  <button type="submit" class="btn btn-primary">Save entered settings. Valid inputs will redirect user to the Home screen.</button>
 </form>
+        </div>
 {% endblock %}
