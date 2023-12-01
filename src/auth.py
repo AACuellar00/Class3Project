@@ -3,10 +3,12 @@ from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
+import os
+import requests
+from dotenv import load_dotenv
 
 auth = Blueprint('auth', __name__)
-
-
+load_dotenv()
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -47,12 +49,18 @@ def register():
         username = request.form.get('userName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
+        EMAIL_VERIFIER = os.getenv("EMAIL_VER_KEY")
+        url = (f"https://api.emailvalidation.io/v1/info?apikey={EMAIL_VERIFIER}&email={email}")
+        payload = {}
+        headers = {}
+        email_response = requests.request("GET", url, headers=headers, data=payload).json()
 
         user = User.query.filter_by(email=email).first()
         if user:
             flash('Email is already in use.', category='error')
-        elif len(email) < 7:
-            flash('Email must be greater than 6 characters.', category='error')
+        elif email_response['state'] == 'undeliverable':
+            flash('Invalid email entered.', category='error')
+            print('Invalid email entered.')
         elif len(username) < 2:
             flash('Name must be greater than 1 character.', category='error')
         elif password1 != password2:
@@ -67,5 +75,4 @@ def register():
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
             return redirect(url_for('views.home'))
-
     return render_template("register.html", user=current_user)

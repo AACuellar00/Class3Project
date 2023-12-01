@@ -10,9 +10,6 @@ load_dotenv()
 
 AQI_KEY = os.getenv("AQI_KEY")
 
-
-
-
 @login_required
 def get_forecast():
     url = (f"https://api.waqi.info/feed/geo:{current_user.latitude};{current_user.longitude}/?token={AQI_KEY}")

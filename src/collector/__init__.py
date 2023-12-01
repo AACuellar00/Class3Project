@@ -3,7 +3,9 @@ import os
 from flask_login import LoginManager
 from src.collect_data import update_all
 from .. import db
+from dotenv import load_dotenv
 
+load_dotenv()
 DB_NAME = "database.db"
 
 def create_app():

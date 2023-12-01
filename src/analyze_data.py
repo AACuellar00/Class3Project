@@ -10,3 +10,4 @@ def average_location_data(aq, aq_entry, last_time_collected):
     aq_entry.times_averaged += 1
     aq_entry.last_time_collected = last_time_collected
     db.session.commit()
+
