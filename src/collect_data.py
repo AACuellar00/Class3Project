@@ -18,7 +18,7 @@ def get_data(latitude, longitude, get_which):
     if get_which == 'forecast':
         return get_forecast(response['data'])
     else:
-        return get_today_aq(response['data'], False)
+        return get_today_aq(response['data'])
 
 
 def get_forecast(response):
@@ -32,19 +32,27 @@ def get_forecast(response):
     return return_value
 
 
-def get_today_aq(response, test):
+def get_today_aq(response):
     aq = response['aqi']
     idx = response['idx']
     city = response['city']['name']
     last_time_generated = response['time']['iso']
-    return_value = {"aqi": aq, "idx": idx, "city": city}
-    if not test:
+    return_value = {"aqi": aq, "idx": idx, "city": city, "last_time_gen": last_time_generated}
+
+    if idx != 999999:
         aq_entry = LocationAirQuality.query.get(idx)
         if aq_entry:
-            if aq_entry.last_time_collected.__eq__(last_time_generated):
-                return return_value
-            else:
-                average_location_data(aq, aq_entry, last_time_generated)
+            aq_data = {"aqc": aq_entry.particulate_matter_level_current,
+                       "aqa": aq_entry.particulate_matter_level_average,
+                       "last_time_collected": aq_entry.last_time_collected,
+                       "averaged_times": aq_entry.times_averaged, "idx": aq_entry.location_id}
+
+            aq_result = average_location_data(aq_data, return_value)
+            aq_entry.particulate_matter_level_current = aq_result["aqc"]
+            aq_entry.particulate_matter_level_average = aq_result["aqa"]
+            aq_entry.last_time_collected = aq_result["last_time_collected"]
+            aq_entry.times_averaged = aq["averaged_times"]
+            db.session.commit()
         else:
             new_location = LocationAirQuality(location_id=idx, particulate_matter_level_average=aq,
                                               particulate_matter_level_current=aq,
@@ -61,6 +69,6 @@ def update_all():
     for user in users:
         lat = user.latitude
         long = user.longitude
-        get_today_aq(lat, long)
+        get_data(lat, long, "today_aq")
         print(user.username)
     print("Updated all locations linked to a user!")

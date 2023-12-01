@@ -4,7 +4,10 @@ from flask_login import LoginManager
 from .. import db
 from dotenv import load_dotenv
 from flask_mail import Mail, Message
-from src.collect_data import get_today_aq
+from src.collect_data import get_data
+from datetime import datetime
+from src.analyze_data import threshold_less_than_aq_of_day
+from zoneinfo import ZoneInfo
 
 load_dotenv()
 DB_NAME = "database.db"
@@ -47,17 +50,24 @@ def create_app():
     def index():
         users = User.query.all()
         for user in users:
+            user_time = datetime.now(tz=ZoneInfo(user.time_zone))
+            user_hour = user_time.strftime("%H")
             if user.allow_emails:
-                aq = get_today_aq(user.latitude, user.longitude)[0]
-                thresh = user.air_quality_threshold
-                if aq < thresh:
-                    message = f"Today's air quality is {aq}. This is under your threshold of {thresh}."
-                else:
-                    message = f"Today's air quality is {aq}. This is over your threshold of {thresh}."
-                msg = Message(subject="Today's forecast", sender=('Adrian', os.getenv('MAIL_USERNAME')),
-                              recipients=[user.email])
-                msg.body = message
-                mail.send(msg)
+                if user_hour.__eq__("6"):
+                    data = get_data(user.latitude, user.longitude, "today_aq")
+                    if not data["last_time_gen"].__eq__(user.last_time_sent):
+                        aq = data["aqi"]
+                        thresh = user.air_quality_threshold
+                        if threshold_less_than_aq_of_day(thresh, aq) == 1:
+                            message = f"Today's air quality is {aq}. This is under your threshold of {thresh}."
+                        else:
+                            message = f"Today's air quality is {aq}. This is over your threshold of {thresh}."
+                        msg = Message(subject="Today's forecast", sender=('Adrian', os.getenv('MAIL_USERNAME')),
+                                      recipients=[user.email])
+                        msg.body = message
+                        mail.send(msg)
+                        user.last_time_sent = data["last_time_gen"]
+                        db.session.commit()
         return "Message(s) sent!"
 
     return app

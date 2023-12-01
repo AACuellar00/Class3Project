@@ -49,8 +49,8 @@ def register():
         username = request.form.get('userName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
-        EMAIL_VERIFIER = os.getenv("EMAIL_VER_KEY")
-        url = (f"https://api.emailvalidation.io/v1/info?apikey={EMAIL_VERIFIER}&email={email}")
+        email_verifier = os.getenv("EMAIL_VER_KEY")
+        url = (f"https://api.emailvalidation.io/v1/info?apikey={email_verifier}&email={email}")
         payload = {}
         headers = {}
         email_response = requests.request("GET", url, headers=headers, data=payload).json()

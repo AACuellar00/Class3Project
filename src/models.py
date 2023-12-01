@@ -9,8 +9,10 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False)
     latitude = db.Column(db.Float(12), default=40.014984)
     longitude = db.Column(db.Float(12), default=-105.270546)
+    time_zone = db.Column(db.String(50), default="America/Denver")
     air_quality_threshold = db.Column(db.Integer, default=50)
     allow_emails = db.Column(db.Boolean, default=False)
+    last_time_sent=db.Column(db.String(30), default="")
 
 
 class LocationAirQuality(db.Model):

@@ -1,8 +1,10 @@
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from . import db
 from flask_login import login_required, current_user
 from .collect_data import get_data
 from .analyze_data import threshold_less_than_aq_of_day
+from timezonefinder import TimezoneFinder
+
 views = Blueprint('views', __name__)
 
 
@@ -28,16 +30,15 @@ def settings():
     if request.method == 'POST':
         form_data = request.form
         try:
-            lat = float(form_data.get('latitude'))
-            current_user.latitude = lat
-        except ValueError:
-            flash('Invalid input for latitude.', category='error')
-            return redirect(url_for('views.settings'))
-        try:
+            lati = float(form_data.get('latitude'))
+            current_user.latitude = lati
             lon = float(form_data.get('longitude'))
             current_user.longitude = lon
+            obj = TimezoneFinder
+            time_zone = obj.timezone_at(lng=lon, lat=lati)
+            current_user.time_zone = time_zone
         except ValueError:
-            flash('Invalid input for longitude.', category='error')
+            flash('Invalid input for latitude or longitude.', category='error')
             return redirect(url_for('views.settings'))
         try:
             aqt = float(form_data.get('air_quality_threshold'))
