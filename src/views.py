@@ -34,7 +34,7 @@ def settings():
             current_user.latitude = lati
             lon = float(form_data.get('longitude'))
             current_user.longitude = lon
-            obj = TimezoneFinder
+            obj = TimezoneFinder()
             time_zone = obj.timezone_at(lng=lon, lat=lati)
             current_user.time_zone = time_zone
         except ValueError:
