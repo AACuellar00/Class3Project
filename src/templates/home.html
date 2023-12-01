@@ -12,25 +12,16 @@
 </body>
 
        <script  type = "text/javascript">
-           const a = {{forecast["one_day"]}} ;
-           const b = {{forecast["two_day"]}} ;
-           const c = {{forecast["three_day"]}} ;
-           const t = {{data.aq}};
-           const col1 = "c1";
-           const col2 = "c2";
-           const col3 = "c3";
-           const tE = "today";
-           const thresh = {{user.air_quality_threshold}};
-           function changeColor(forecastq,element){
+           function changeColor(forecastq,element, compare){
                var img = document.createElement("img");
                document.getElementById(element).innerHTML += "<br>";
-               if (forecastq>{{user.air_quality_threshold}})
-                     document.getElementById(element).innerHTML +=
-                         "<br>This level is over your designated threshold of ";
-               else
+               if ( compare === 0)
                      document.getElementById(element).innerHTML +=
                          "<br>This level is under your designated threshold of ";
-                document.getElementById(element).innerHTML += thresh;
+               else
+                     document.getElementById(element).innerHTML +=
+                         "<br>This level is over your designated threshold of ";
+                document.getElementById(element).innerHTML += {{user.air_quality_threshold}};
                 document.getElementById(element).innerHTML += ".<br>";
                 if (forecastq<50) {
                     document.getElementById(element).style = "background-color: rgb(171, 227, 91);";
@@ -76,10 +67,10 @@
                 }
               }
               function changeAllThree(){
-                  changeColor(t,tE);
-                    changeColor(a,col1);
-                     changeColor(b,col2);
-                      changeColor(c,col3);
+                  changeColor( {{data.aq}},"today", {{threshold_under_aq_list[0]}} );
+                    changeColor({{forecast["one_day"]}} ,"c1", {{threshold_under_aq_list[1]}} );
+                     changeColor({{forecast["two_day"]}} ,"c2", {{threshold_under_aq_list[2]}} );
+                      changeColor({{forecast["three_day"]}} ,"c3", {{threshold_under_aq_list[3]}} );
               }
        </script>
 <br>

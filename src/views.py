@@ -1,19 +1,25 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from . import db
 from flask_login import login_required, current_user
-from .collect_data import get_today_aq, get_forecast
-
-
+from .collect_data import get_data
+from .analyze_data import threshold_less_than_aq_of_day
 views = Blueprint('views', __name__)
 
 
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    return_value = get_today_aq(current_user.latitude, current_user.longitude)
-    data = {'aq': return_value[0], 'station': return_value[1], 'cityN': return_value[2]}
-    forecast = get_forecast()
-    return render_template("home.html", user=current_user, data=data, forecast=forecast)
+    lat = current_user.latitude
+    lon = current_user.longitude
+    return_value = get_data(lat, lon, 'today_aq')
+    data = {'aq': return_value['aqi'], 'station': return_value['idx'], 'cityN': return_value['city']}
+    forecast = get_data(lat, lon, 'forecast')
+    threshold_under_aq_list = [threshold_less_than_aq_of_day(current_user.air_quality_threshold, return_value['aqi']),
+                               threshold_less_than_aq_of_day(current_user.air_quality_threshold, forecast["one_day"]),
+                               threshold_less_than_aq_of_day(current_user.air_quality_threshold, forecast["two_day"]),
+                               threshold_less_than_aq_of_day(current_user.air_quality_threshold, forecast["three_day"])]
+    return render_template("home.html", user=current_user, data=data,
+                           forecast=forecast, threshold_under_aq_list=threshold_under_aq_list)
 
 
 @views.route('/settings', methods=['GET', 'POST'])

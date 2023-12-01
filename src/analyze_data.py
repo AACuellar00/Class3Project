@@ -11,3 +11,9 @@ def average_location_data(aq, aq_entry, last_time_collected):
     aq_entry.last_time_collected = last_time_collected
     db.session.commit()
 
+
+def threshold_less_than_aq_of_day(user_threshold, aq_of_day):
+    if user_threshold < aq_of_day:
+        return 1
+    else:
+        return 0
