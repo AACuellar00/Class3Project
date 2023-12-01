@@ -34,17 +34,17 @@ def get_today_aq(latitude, longitude):
     aq = response['data']['aqi']
     idx = response['data']['idx']
     city = response['data']['city']['name']
-    last_time_collected = response['data']['time']['iso']
+    last_time_generated = response['data']['time']['iso']
     aq_entry = LocationAirQuality.query.get(idx)
     return_value = [aq, idx, city]
     if aq_entry:
-        if aq_entry.last_time_collected.__eq__(last_time_collected):
+        if aq_entry.last_time_collected.__eq__(last_time_generated):
             return return_value
         else:
-            average_location_data(aq, aq_entry, last_time_collected)
+            average_location_data(aq, aq_entry, last_time_generated)
     else:
         new_location = LocationAirQuality(location_id=idx, particulate_matter_level_average=aq,
-                                          particulate_matter_level_current=aq, last_time_collected=last_time_collected)
+                                          particulate_matter_level_current=aq, last_time_collected=last_time_generated)
         db.session.add(new_location)
         db.session.commit()
 
