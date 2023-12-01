@@ -51,7 +51,7 @@ def get_today_aq(response):
             aq_entry.particulate_matter_level_current = aq_result["aqc"]
             aq_entry.particulate_matter_level_average = aq_result["aqa"]
             aq_entry.last_time_collected = aq_result["last_time_collected"]
-            aq_entry.times_averaged = aq["averaged_times"]
+            aq_entry.times_averaged = aq_result["averaged_times"]
             db.session.commit()
         else:
             new_location = LocationAirQuality(location_id=idx, particulate_matter_level_average=aq,
