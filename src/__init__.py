@@ -3,10 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_login import LoginManager
 from dotenv import load_dotenv
+from prometheus_client import Counter
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
 load_dotenv()
+REQUESTS = Counter("total_application_requests", "Total HTTP requests to the application.")
 def create_app():
     app = Flask(__name__)
     uri = os.getenv('DATABASE_URL')

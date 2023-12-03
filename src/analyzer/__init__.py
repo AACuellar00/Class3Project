@@ -46,28 +46,26 @@ def create_app():
 
     mail = Mail(app)
 
-    @app.route("/")
-    def index():
-        users = User.query.all()
-        for user in users:
-            user_time = datetime.now(tz=ZoneInfo(user.time_zone))
-            user_hour = user_time.strftime("%H")
-            if user.allow_emails:
-                if user_hour.__eq__("7"):
-                    data = get_data(user.latitude, user.longitude, "today_aq")
-                    if not data["last_time_gen"].__eq__(user.last_time_sent):
-                        aq = data["aqi"]
-                        thresh = user.air_quality_threshold
-                        if threshold_less_than_aq_of_day(thresh, aq) == 1:
-                            message = f"Today's air quality is {aq}. This is under your threshold of {thresh}."
-                        else:
-                            message = f"Today's air quality is {aq}. This is over your threshold of {thresh}."
-                        msg = Message(subject="Today's forecast", sender=('Adrian', os.getenv('MAIL_USERNAME')),
-                                      recipients=[user.email])
-                        msg.body = message
-                        mail.send(msg)
-                        user.last_time_sent = data["last_time_gen"]
-                        db.session.commit()
-        return "Message(s) sent!"
+    users = User.query.all()
+    for user in users:
+        user_time = datetime.now(tz=ZoneInfo(user.time_zone))
+        user_hour = user_time.strftime("%H")
+        if user.allow_emails:
+            if user_hour.__eq__("7"):
+                data = get_data(user.latitude, user.longitude, "today_aq")
+                if not data["last_time_gen"].__eq__(user.last_time_sent):
+                    aq = data["aqi"]
+                    thresh = user.air_quality_threshold
+                    if threshold_less_than_aq_of_day(thresh, aq) == 1:
+                        message = f"Today's air quality is {aq}. This is under your threshold of {thresh}."
+                    else:
+                        message = f"Today's air quality is {aq}. This is over your threshold of {thresh}."
+                    msg = Message(subject="Today's forecast", sender=('Adrian', os.getenv('MAIL_USERNAME')),
+                                    recipients=[user.email])
+                    msg.body = message
+                    mail.send(msg)
+                    user.last_time_sent = data["last_time_gen"]
+                    db.session.commit()
+    print("Message(s) sent!")
 
     return app

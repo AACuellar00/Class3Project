@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'Monitor web application'
+    metrics_path: '/metrics'
+    follow_redirects: true
+    enable_http2: true
+    static_configs:
+    - targets: ['localhost:5000']

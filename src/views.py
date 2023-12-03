@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from . import db
+from . import db, REQUESTS
 from flask_login import login_required, current_user
 from .collect_data import get_data
 from .analyze_data import threshold_less_than_aq_of_day
 from timezonefinder import TimezoneFinder
+from prometheus_client import generate_latest
 
 views = Blueprint('views', __name__)
 
@@ -11,6 +12,7 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
+    REQUESTS.inc()
     lat = current_user.latitude
     lon = current_user.longitude
     return_value = get_data(lat, lon, 'today_aq')
@@ -21,12 +23,13 @@ def home():
                                threshold_less_than_aq_of_day(current_user.air_quality_threshold, forecast["two_day"]),
                                threshold_less_than_aq_of_day(current_user.air_quality_threshold, forecast["three_day"])]
     return render_template("home.html", user=current_user, data=data,
-                           forecast=forecast, threshold_under_aq_list=threshold_under_aq_list)
+                           forecast=forecast, threshold_under_aq_list=threshold_under_aq_list), 200
 
 
 @views.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
+    REQUESTS.inc()
     if request.method == 'POST':
         form_data = request.form
         try:
@@ -57,4 +60,12 @@ def settings():
         return redirect(url_for('views.home'))
     return render_template('settings.html',
                            lat=current_user.latitude, lon=current_user.longitude,
-                           aqt=current_user.air_quality_threshold)
+                           aqt=current_user.air_quality_threshold), 200
+
+@views.route('/metrics', methods=['GET'])
+def metrics():
+    return generate_latest()
+
+@views.route("/health")
+def health():
+    return "200",200
