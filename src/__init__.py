@@ -10,14 +10,16 @@ db = SQLAlchemy()
 DB_NAME = "database.db"
 load_dotenv()
 REQUESTS = Counter("total_application_requests", "Total HTTP requests to the application.")
+
+
 def create_app():
     app = Flask(__name__)
 
-    if os.getenv('ENV').__eq__('prod'):
-        uri = os.getenv('DATABASE_URL')
-        if uri and uri.startswith("postgres://"):
-            uri = uri.replace("postgres://", "postgresql://", 1)
-    else:
+    uri = os.getenv('DATABASE_URL')
+    if uri and uri.startswith("postgres://"):
+        uri = uri.replace("postgres://", "postgresql://", 1)
+
+    if os.getenv('ENV').__eq__('test'):
         app.config['TESTING'] = True
         uri = f'sqlite:///{DB_NAME}'
 
@@ -46,4 +48,3 @@ def create_app():
         return User.query.get(int(id))
 
     return app
-
