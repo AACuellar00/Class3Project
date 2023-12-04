@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
     time_zone = db.Column(db.String(50), default="America/Los_Angeles")
     air_quality_threshold = db.Column(db.Integer, default=50)
     allow_emails = db.Column(db.Boolean, default=False)
-    last_time_sent=db.Column(db.String(30), default="")
+    last_time_sent = db.Column(db.String(30), default="")
 
 
 class LocationAirQuality(db.Model):

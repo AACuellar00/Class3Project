@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
+from os import path
 from flask_login import LoginManager
 from dotenv import load_dotenv
 from prometheus_client import Counter
@@ -11,11 +12,16 @@ load_dotenv()
 REQUESTS = Counter("total_application_requests", "Total HTTP requests to the application.")
 def create_app():
     app = Flask(__name__)
-    uri = os.getenv('DATABASE_URL')
+
+    if os.getenv('ENV').__eq__('prod'):
+        uri = os.getenv('DATABASE_URL')
+        if uri and uri.startswith("postgres://"):
+            uri = uri.replace("postgres://", "postgresql://", 1)
+    else:
+        app.config['TESTING'] = True
+        uri = f'sqlite:///{DB_NAME}'
 
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-    if uri and uri.startswith("postgres://"):
-        uri = uri.replace("postgres://", "postgresql://", 1)
     app.config['SQLALCHEMY_DATABASE_URI'] = uri
 
     db.init_app(app)
@@ -40,3 +46,4 @@ def create_app():
         return User.query.get(int(id))
 
     return app
+
