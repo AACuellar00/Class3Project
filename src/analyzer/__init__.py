@@ -43,8 +43,12 @@ def create_app():
         for user in users:
             user_time = datetime.now(tz=ZoneInfo(user.time_zone))
             user_hour = user_time.strftime("%H")
+            print(user_hour)
             if user.allow_emails:
-                if user_hour.__eq__("7"):
+                print("allowed")
+                if user_hour.__eq__("14") or user_hour.__eq__("15"):
+                    print(user_hour.__eq__("14"))
+                    print(user_hour.__eq__("15"))
                     data = get_data(user.latitude, user.longitude, "today_aq")
                     if not data["last_time_gen"].__eq__(user.last_time_sent):
                         aq = data["aqi"]
@@ -54,7 +58,7 @@ def create_app():
                         else:
                             message = f"Today's air quality is {aq}. This is over your threshold of {thresh}."
                         msg = Message(subject="Today's forecast", sender=('Adrian', os.getenv('MAIL_USERNAME')),
-                                    recipients=[user.email])
+                                      recipients=[user.email])
                         msg.body = message
                         mail.send(msg)
                         user.last_time_sent = data["last_time_gen"]
