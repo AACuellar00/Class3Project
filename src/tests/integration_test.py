@@ -207,13 +207,6 @@ class ATest(MyTest):
 
     def test_data_collection_and_analysis(self):
 
-        user_a = User(id=777777, email="testcase@url.com", password="password", username="tester", latitude=37.773972,
-                      longitude=-122.431297, time_zone="America/Los_Angeles", air_quality_threshold=30)
-
-        user_b = User(id=888888, email="testcasetwo@url.com", password="password", username="tester2",
-                      latitude=40.776676,
-                      longitude=-73.971321, time_zone="America/New_York", air_quality_threshold=20)
-
         test_loc1 = LocationAirQuality(location_id=3900,
                                        particulate_matter_level_current=30, particulate_matter_level_average=50,
                                        times_averaged=10, last_time_collected="2023-12-03T21:00:00-08:00")
@@ -221,8 +214,6 @@ class ATest(MyTest):
                                        particulate_matter_level_current=18, particulate_matter_level_average=30,
                                        times_averaged=5, last_time_collected="2023-12-04T00:00:00-05:00")
 
-        db.session.add(user_a)
-        db.session.add(user_b)
         db.session.add(test_loc1)
         db.session.add(test_loc2)
         db.session.commit()
@@ -230,6 +221,7 @@ class ATest(MyTest):
         get_today_aq(mock_aq_forecast())
         get_today_aq(mock_aq_forecast_two())
         loc_one = LocationAirQuality.query.get(3900)
+        loc_two = LocationAirQuality.query.get(59)
         loc_three = LocationAirQuality.query.get(12851)
 
         assert loc_one.times_averaged == 11, f"Expected times averaged of 11, but got {loc_one.times_averaged}"
@@ -239,6 +231,14 @@ class ATest(MyTest):
             f"Expected current particle level of 27, but got {loc_one.particulate_matter_level_current}"
         assert loc_one.last_time_collected.__eq__("2023-12-03T23:00:00-08:00"), \
             f"Expected time of 2023-12-03T23:00:00-08:00, but got {loc_one.last_time_collected}"
+
+        assert loc_two.times_averaged == 5, f"Expected times averaged of 5, but got {loc_two.times_averaged}"
+        assert loc_two.particulate_matter_level_average == 30, \
+            f"Expected current average of 30, but got {loc_two.particulate_matter_level_average}"
+        assert loc_two.particulate_matter_level_current == 18, \
+            f"Expected current particle level of 18, but got {loc_two.particulate_matter_level_current}"
+        assert loc_two.last_time_collected.__eq__("2023-12-04T00:00:00-05:00"), \
+            f"Expected time of 2023-12-04T00:00:00-05:00, but got {loc_two.last_time_collected}"
 
         assert loc_three.times_averaged == 1, f"Expected times averaged of 1, but got {loc_three.times_averaged}"
         assert loc_three.particulate_matter_level_average == 27, \

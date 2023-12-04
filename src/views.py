@@ -62,10 +62,12 @@ def settings():
                            lat=current_user.latitude, lon=current_user.longitude,
                            aqt=current_user.air_quality_threshold), 200
 
+
 @views.route('/metrics', methods=['GET'])
-def metrics():
+async def metrics():
     return generate_latest()
 
+
 @views.route("/health")
-def health():
-    return "200",200
+async def health():
+    return "Healthy Application Here", 200
