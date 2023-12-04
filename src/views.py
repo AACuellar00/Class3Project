@@ -16,7 +16,8 @@ def home():
     lat = current_user.latitude
     lon = current_user.longitude
     return_value = get_data(lat, lon, 'today_aq')
-    data = {'aq': return_value['aqi'], 'station': return_value['idx'], 'cityN': return_value['city']}
+    data = {'aq': return_value['aqi'], 'station': return_value['idx'], 'cityN': return_value['city'],
+            'average': return_value['average_aq']}
     forecast = get_data(lat, lon, 'forecast')
     threshold_under_aq_list = [threshold_less_than_aq_of_day(current_user.air_quality_threshold, return_value['aqi']),
                                threshold_less_than_aq_of_day(current_user.air_quality_threshold, forecast["one_day"]),

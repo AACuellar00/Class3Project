@@ -37,7 +37,7 @@ def get_today_aq(response):
     idx = response['idx']
     city = response['city']['name']
     last_time_generated = response['time']['iso']
-    return_value = {"aqi": aq, "idx": idx, "city": city, "last_time_gen": last_time_generated}
+    return_value = {"aqi": aq, "idx": idx, "city": city, "last_time_gen": last_time_generated, "average_aq": aq}
 
     if idx != 999999:
         aq_entry = LocationAirQuality.query.get(idx)
@@ -52,6 +52,7 @@ def get_today_aq(response):
             aq_entry.particulate_matter_level_average = aq_result["aqa"]
             aq_entry.last_time_collected = aq_result["last_time_collected"]
             aq_entry.times_averaged = aq_result["averaged_times"]
+            return_value["average_aq"] = aq_result["aqa"]
             db.session.commit()
         else:
             new_location = LocationAirQuality(location_id=idx, particulate_matter_level_average=aq,
