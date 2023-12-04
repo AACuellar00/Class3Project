@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 DB_NAME = "database.db"
 
+
 def create_app():
     app = Flask(__name__)
     uri = os.getenv('DATABASE_URL')

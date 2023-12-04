@@ -37,5 +37,4 @@ scheduler.add_job(func=scheduled_task, trigger="interval", minutes=60)
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 
-app.run(port=5001)
 
