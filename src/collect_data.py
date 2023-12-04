@@ -66,7 +66,6 @@ def get_today_aq(response):
 
 def update_all():
     users = User.query.all()
-    print(users)
     for user in users:
         lat = user.latitude
         long = user.longitude
