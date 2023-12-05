@@ -49,7 +49,7 @@ def create_app():
                     print(data["last_time_gen"])
                     print(user.last_time_sent)
                     if not data["last_time_gen"].__eq__(user.last_time_sent):
-                        print(f"Sending to {user.user_name}")
+                        print(f"Sending to {user.username}")
                         aq = data["aqi"]
                         thresh = user.air_quality_threshold
                         if threshold_less_than_aq_of_day(thresh, aq) == 1:
