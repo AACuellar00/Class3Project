@@ -3,7 +3,7 @@
 This is a web application that saves a users location and shows the current air quality for said location according to the nearest monitoring station. The
 user can also designate an air quality threshold should they so choose so as to know whether the air quality is above or below that also. Along with that it
 also records an average air quality value for the location that is periodically updated so long as a user is linked to that location. A three day forecast 
-for air quality is also included. Optionally a user can opt in to recieve a dail email about their area's air quality and whether or not it is above or below
+for air quality is also included. Optionally a user can opt in to recieve a daily morning email about their area's air quality and whether or not it is above or below
 their threshold.Note that this email will only be sent if the station near them has actually updated since the last email. As air quality monitoring stations
 are not installed in all locations and they are not always up, the locations shown to a user may not actually be as close as one would like. 
 
@@ -39,18 +39,24 @@ All data is stored in a postgresql database provided by Heroku Postgres
 Dependencies
 Tested using python 3.10.5. 
 Create the virtual environment first with: 
+
 python -m venv venv
+
 Start with the virtual environment with:
+
 source venv/bin/activate
+
 Install the requirements with: 
+
 pip install -r requirements.txt
 
 Test by installing dependencies and running ENV=local pytest. 
 
 Running the app:
 flask --app src/app run
-flask --app src/collector_script collector_s run -p 5001
-flask --app src/analyzer_script analyzer_s  run -p 5002
+flask --app src/collectorscript/collectorscript run -p 5001
+flask --app src/analyzerscript/analyzerscript  run -p 5002
+
 
 
 All AQ information is provided by the World Air Quality Index Project and all their EPA sources. Their site can be found at https://aqicn.org .

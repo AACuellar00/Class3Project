@@ -64,10 +64,6 @@ def settings():
                            aqt=current_user.air_quality_threshold), 200
 
 
-@views.route('/metrics', methods=['GET'])
-async def metrics():
-    return generate_latest()
-
 
 @views.route("/health")
 async def health():
