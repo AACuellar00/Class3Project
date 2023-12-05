@@ -1,9 +1,52 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
 
+ <h3 align="center">Sign Up</h3>
+
+
+    <button onclick="getLocation()">Locate through geolocation (May take several seconds when pressed) </button>
+    <br/>
+    <div id="geolocate"></div>
+    <br/>
+
+
+    <script>
+        const x = document.getElementById("geolocate");
+
+        function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(passPosition, showError);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+        }
+
+        function passPosition(position) {
+            document.getElementById('latitude').value = position.coords.latitude
+            document.getElementById('longitude').value = position.coords.longitude
+        }
+
+
+        function showError(error) {
+         switch(error.code) {
+          case error.PERMISSION_DENIED:
+           x.innerHTML = "You have denied the request for Geolocation."
+              break;
+        case error.POSITION_UNAVAILABLE:
+              x.innerHTML = "Location information is unavailable."
+              break;
+          case error.TIMEOUT:
+              x.innerHTML = "The request to get user location timed out."
+              break;
+         case error.UNKNOWN_ERROR:
+              x.innerHTML = "An unknown error occurred."
+           break;
+        }
+        }
+    </script>
+
 
 <form method="POST">
-  <h3 align="center">Sign Up</h3>
   <div class="form-group">
     <label for="email">Email Address</label>
     <input
@@ -14,6 +57,7 @@ content %}
       placeholder="Enter your email address."
     />
   </div>
+  <br/>
   <div class="form-group">
     <label for="userName">Username</label>
     <input
@@ -24,6 +68,37 @@ content %}
       placeholder="Enter your user name."
     />
   </div>
+  <br/>
+
+   <div class="form-group" >
+        <label for="latitude">Latitude</label>
+            <input required type="text" class="form-control" id="latitude" name="latitude" enterkeyhint="next" value=37.773972 />
+      </div>
+        <br/>
+        <div class="form-group" >
+        <label for="longitude">Longitude</label>
+            <input required type="text" class="form-control" id="longitude" name="longitude" enterkeyhint="next" value=-122.431297 />
+      </div>
+          <br/>
+
+      <div class="form-group">
+    <label for="air_quality_threshold">PM 2.5 Threshold</label>
+    <input
+      type="number"
+      class="form-control"
+      id="air_quality_threshold"
+      name="air_quality_threshold"
+      placeholder="Enter your air quality tolerance threshold."
+      value=50
+    />
+  </div>
+<br/>
+  <input type="checkbox" id="email_allowed" name="email_allowed" value="Yes" >
+  <label for="email_allowed">Receive a daily email about air quality levels.</label><br>
+<br/>
+
+
+
   <div class="form-group">
     <label for="password1">Password</label>
     <input
@@ -34,6 +109,7 @@ content %}
       placeholder="Enter your password."
     />
   </div>
+  <br/>
   <div class="form-group">
     <label for="password2">Password (Confirm)</label>
     <input

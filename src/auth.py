@@ -6,6 +6,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 import os
 import requests
 from dotenv import load_dotenv
+from timezonefinder import TimezoneFinder
 
 auth = Blueprint('auth', __name__)
 load_dotenv()
@@ -47,11 +48,23 @@ def register():
     if request.method == 'POST':
         if current_user.is_authenticated:
             return redirect(url_for('views.home'))
+        form_data = request.form
+        email = form_data.get('email')
+        username = form_data.get('userName')
 
-        email = request.form.get('email')
-        username = request.form.get('userName')
-        password1 = request.form.get('password1')
-        password2 = request.form.get('password2')
+        try:
+            lati = float(form_data.get('latitude'))
+            lon = float(form_data.get('longitude'))
+            obj = TimezoneFinder()
+            time_zone = obj.timezone_at(lng=lon, lat=lati)
+        except ValueError:
+            flash('Invalid input for latitude or longitude.', category='error')
+            return render_template("register.html", user=current_user), 200
+
+        aqt = float(form_data.get('air_quality_threshold'))
+        allow_emails = (form_data.get('email_allowed') == 'Yes')
+        password1 = form_data.get('password1')
+        password2 = form_data.get('password2')
         email_verifier = os.getenv("EMAIL_VER_KEY")
         url = (f"https://api.emailvalidation.io/v1/info?apikey={email_verifier}&email={email}")
         payload = {}
@@ -63,16 +76,18 @@ def register():
             flash('Email is already in use.', category='error')
         elif email_response['state'] == 'undeliverable':
             flash('Invalid email entered.', category='error')
-            print('Invalid email entered.')
         elif len(username) < 2:
             flash('Name must be greater than 1 character.', category='error')
+        elif aqt<0:
+            flash('Negative numbers are not accepted for air quality threshold.', category='error')
         elif password1 != password2:
             flash('Your passwords don\'t match.', category='error')
         elif len(password1) < 7:
             flash('Password must be greater than 6 characters.', category='error')
         else:
-            new_user = User(email=email, username=username, password=generate_password_hash(
-                password1, method='scrypt'))
+            new_user = User(email=email, username=username, latitude=lati, longitude=lon,
+                            time_zone=time_zone, air_quality_threshold=aqt,
+                            allow_emails=allow_emails, password=generate_password_hash(password1, method='scrypt'))
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)

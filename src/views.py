@@ -68,3 +68,24 @@ def settings():
 @views.route("/health")
 async def health():
     return "Healthy Application Here", 200
+
+
+@views.route('/latitude:<latitude>/longitude:<longitude>', methods=['GET', 'POST'])
+def location(latitude,longitude):
+    REQUESTS.inc()
+    try:
+        lat = float(latitude)
+        long = float(longitude)
+        obj = TimezoneFinder()
+        time_zone = obj.timezone_at(lng=long, lat=lat)
+        current_user.time_zone = time_zone
+    except ValueError:
+        flash('Invalid input for latitude or longitude. Here is an example of proper coordinates. ', category='error')
+        return redirect(url_for('views.location', latitude=37.77,longitude=-122.43))
+
+    return_value = get_data(lat, long, 'today_aq')
+    data = {'aq': return_value['aqi'], 'station': return_value['idx'], 'cityN': return_value['city'],
+            'average': return_value['average_aq']}
+    forecast = get_data(lat, long, 'forecast')
+    return render_template("location.html", data=data,
+                           forecast=forecast), 200

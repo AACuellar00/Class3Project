@@ -26,7 +26,7 @@ When the script is launched it will collect data hourly. On the live website it 
 
 Data is analyzed through src/analyze_data.py with the same web page timings as user, and is also done through src/analyzer_script/analyzer_s.py 
  and is two fold. One analysis is whether the air quality is below or above a user's threshold and the other is averaging the air quality data for a given 
-location. When the script is launched it will analyze the data for emailing purposes hourly. On the live website it is done through Cron go To Scheduler on Heroku. 
+location. When the script is launched it will analyze the data for emailing purposes hourly. On the live website it is done through Cron To Go Scheduler on Heroku. 
 
 Unit testing and Integration tests are in src/tests as unit_test.py and integration_test.py respectively. 
 

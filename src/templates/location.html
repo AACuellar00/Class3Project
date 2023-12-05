@@ -1,0 +1,76 @@
+{% extends "base.html" %} {% block title %}Enter Your Location{% endblock %} {% block content
+%}
+
+<body onLoad="changeAllThree()">
+
+<div id = "information" align="center">Hello Guest, this web page allows you to directly input your
+    coordinates into the url to retrieve the air quality information corresponding to those coordinates.</div>
+    <br>
+
+<div class = "day" id = "today" align="center">Hello Guest, the station that is both closest to these coordinates and most recently updated is located at {{data.cityN}}.
+    The air quality according to it is {{data.aq}}. The average air quality for this location is {{data.average}}.</div>
+
+ <div class="row">
+  <div id = "c1" class="column" align="center" >Expected Air Quality Tomorrow: {{forecast.one_day}}</div>
+  <div id = "c2" class="column" align="center" >Expected Air Quality in Two Days: {{forecast.two_day}}</div>
+  <div id = "c3" class="column" align="center" >Expected Air Quality in Three Days: {{forecast.three_day}}</div>
+    </div>
+</body>
+
+       <script  type = "text/javascript">
+           function changeColor(forecast_aq,element){
+               var img = document.createElement("img");
+               document.getElementById(element).innerHTML += "<br>";
+                if (forecast_aq<50) {
+                    document.getElementById(element).style = "background-color: rgb(171, 227, 91);";
+                    document.getElementById(element).innerHTML += "<br>Safe levels detected.";
+                    document.getElementById(element).innerHTML += "<br>";
+                    img.src = "/static/images/Green.png";
+                    document.getElementById(element).appendChild(img);
+                }
+               else if (forecast_aq<100) {
+                    document.getElementById(element).style = "background-color: rgb(251, 211, 75);";
+                    document.getElementById(element).innerHTML += "<br>Caution is recommended for those who are very sensitive to air pollution.";
+                    document.getElementById(element).innerHTML += "<br>";
+                    img.src = "/static/images/Yellow.png";
+                    document.getElementById(element).appendChild(img);
+                }
+                else if (forecast_aq<150) {
+                    document.getElementById(element).style = "background-color: rgb(251, 155, 83);";
+                    document.getElementById(element).innerHTML += "<br>If you are sensitive to air pollution you should limit exposure as much as possible.";
+                    document.getElementById(element).innerHTML += "<br>";
+                    img.src = "/static/images/Orange.png";
+                    document.getElementById(element).appendChild(img);
+                }
+                 else if (forecast_aq<200) {
+                    document.getElementById(element).style = "background-color: rgb(251, 107, 107);";
+                     document.getElementById(element).innerHTML += "<br>Everybody should limit their exposure as much as possible.";
+                    document.getElementById(element).innerHTML += "<br>";
+                    img.src = "/static/images/Red.png";
+                    document.getElementById(element).appendChild(img);
+                }
+                else if (forecastq<300) {
+                    document.getElementById(element).style = "background-color: rgb(171, 123, 187);";
+                     document.getElementById(element).innerHTML += "<br>It is recommended that you don't go outside.";
+                    document.getElementById(element).innerHTML += "<br>";
+                    img.src = "/static/images/Purple.png";
+                    document.getElementById(element).appendChild(img);
+                }
+                 else {
+                    document.getElementById(element).style = "background-color: rgb(171, 115, 131);";
+                    document.getElementById(element).innerHTML += "<br>It is recommended that you don't go outside.";
+                    document.getElementById(element).innerHTML += "<br>";
+                    img.src = "/static/images/DarkV.png";
+                    document.getElementById(element).appendChild(img);
+                }
+              }
+              function changeAllThree(){
+                  changeColor( {{data.aq}},"today");
+                    changeColor({{forecast["one_day"]}} ,"c1");
+                     changeColor({{forecast["two_day"]}} ,"c2");
+                      changeColor({{forecast["three_day"]}} ,"c3");
+              }
+       </script>
+<br>
+      <a href='https://pngtree.com/freepng/boy-air-quality_6845091.html'>The air quality faces were designed by HadoNguyen from pngtree.com</a>
+{% endblock %}
