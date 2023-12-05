@@ -54,9 +54,9 @@ def scheduled_task():
                         aq = data["aqi"]
                         thresh = user.air_quality_threshold
                         if threshold_less_than_aq_of_day(thresh, aq) == 1:
-                            message = f"Today's air quality near you is {aq}. This is under your threshold of {thresh}."
+                            message = f"Today's air quality near you at {data['city']} is {aq}. This is under your threshold of {thresh}."
                         else:
-                            message = f"Today's air quality near you is {aq}. This is over your threshold of {thresh}."
+                            message = f"Today's air quality near you at {data['city']} is {aq}. This is over your threshold of {thresh}."
                         msg = Message(subject="Today's forecast", sender=('Adrian', os.getenv('MAIL_USERNAME')),
                                       recipients=[user.email])
                         msg.body = message

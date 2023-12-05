@@ -21,12 +21,12 @@ Web application is done through python and flask and of course html/css/javascri
 
 Data is retrieved through methodss in src/collect_data.py. The data is retrieved periodically through src/collector_script/collector_s.py, and is 
 also retrieved whenever the user opens the home webpage or updates their settings. All data is saved in a postgresql database provided by heroku postgres.
-The script is run hourly through APScheduler. On the live website it is done through Heroku Scheduler. 
+When the script is launched it will collect data hourly. On the live website it is done through Cron go To Scheduler on Heroku. 
 
 
 Data is analyzed through src/analyze_data.py with the same web page timings as user, and is also done through src/analyzer_script/analyzer_s.py 
  and is two fold. One analysis is whether the air quality is below or above a user's threshold and the other is averaging the air quality data for a given 
-location. The script is run hourly through APScheduler. On the live website it is done through Heroku Scheduler. 
+location. When the script is launched it will analyze the data for emailing purposes hourly. On the live website it is done through Cron go To Scheduler on Heroku. 
 
 Unit testing and Integration tests are in src/tests as unit_test.py and integration_test.py respectively. 
 
