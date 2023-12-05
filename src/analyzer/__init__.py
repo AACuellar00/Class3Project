@@ -44,12 +44,10 @@ def create_app():
             user_time = datetime.now(tz=ZoneInfo(user.time_zone))
             user_hour = user_time.strftime("%H")
             if user.allow_emails:
-                if user_hour.__eq__("11"):
+                if user_hour.__eq__("7"):
                     data = get_data(user.latitude, user.longitude, "today_aq")
-                    print(data["last_time_gen"])
-                    print(user.last_time_sent)
                     if not data["last_time_gen"].__eq__(user.last_time_sent):
-                        print(f"Sending to {user.username}")
+                        print(f"Sending emai to {user.username}")
                         aq = data["aqi"]
                         thresh = user.air_quality_threshold
                         if threshold_less_than_aq_of_day(thresh, aq) == 1:
