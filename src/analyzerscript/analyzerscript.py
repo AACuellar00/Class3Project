@@ -47,7 +47,7 @@ def scheduled_task():
             user_time = datetime.now(tz=ZoneInfo(user.time_zone))
             user_hour = user_time.strftime("%H")
             if user.allow_emails:
-                if user_hour.__eq__("7"):
+                if user_hour.__eq__("07"):
                     data = get_data(user.latitude, user.longitude, "today_aq")
                     if not data["last_time_gen"].__eq__(user.last_time_sent):
                         print(f"Sending emai to {user.username}")
@@ -72,6 +72,6 @@ def home():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=scheduled_task, trigger="interval", minutes=60)
+scheduler.add_job(func=scheduled_task, trigger="interval", minutes=2)
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())

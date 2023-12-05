@@ -12,7 +12,10 @@ User Story
 As somebody who lives in California and with the ever increasing amount of wildfires across the globe, I thought it would be nice to have something that
 could readily tell me the air quality near me, and even with an daily email too.
 
-The live version is available at https://aq-forecast-31d76c74a953.herokuapp.com/ 
+The live version is available at 
+
+https://aq-forecast-31d76c74a953.herokuapp.com/ 
+
 Note that it requires an account with a valid email to see anything however. After creating the account just click settings and either press the button
 to geolocate yourself based on your ip or enter a set of coordinates to save your location. Optionally one can also change their air quality threshold from 
 the default of 50 and can also check the box for whether or not you want to recieve daily emails.
@@ -53,8 +56,11 @@ pip install -r requirements.txt
 Test by installing dependencies and running ENV=local pytest. 
 
 Running the app:
+
 flask --app src/app run
+
 flask --app src/collectorscript/collectorscript run -p 5001
+
 flask --app src/analyzerscript/analyzerscript  run -p 5002
 
 

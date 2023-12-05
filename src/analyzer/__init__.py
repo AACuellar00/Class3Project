@@ -44,11 +44,8 @@ def create_app():
             user_time = datetime.now(tz=ZoneInfo(user.time_zone))
             user_hour = user_time.strftime("%H")
             if user.allow_emails:
-                print(user_hour)
-                if user_hour.__eq__("7") or user_hour.__eq__("8"):
+                if user_hour.__eq__("07"):
                     data = get_data(user.latitude, user.longitude, "today_aq")
-                    print(data["last_time_gen"])
-                    print(user.last_time_sent)
                     if not data["last_time_gen"].__eq__(user.last_time_sent):
                         print(f"Sending emai to {user.username}")
                         aq = data["aqi"]
