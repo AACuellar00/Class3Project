@@ -69,6 +69,10 @@ def settings():
 async def health():
     return "Healthy Application Here", 200
 
+@views.route('/metrics', methods=['GET'])
+def metrics():
+    return generate_latest()
+
 
 @views.route('/latitude:<latitude>/longitude:<longitude>', methods=['GET', 'POST'])
 def location(latitude,longitude):

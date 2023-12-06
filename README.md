@@ -53,7 +53,8 @@ Install the requirements with:
 
 pip install -r requirements.txt
 
-Test by installing dependencies and running ENV=local pytest. 
+Test by installing dependencies and then with 'ENV' set to 'test' run: pytest
+Production is done with 'ENV' set to 'prod'
 
 Running the app:
 

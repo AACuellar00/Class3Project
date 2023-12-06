@@ -8,7 +8,7 @@ from prometheus_client import Counter
 db = SQLAlchemy()
 DB_NAME = "database.db"
 load_dotenv()
-REQUESTS = Counter("total_application_requests", "Total HTTP requests to the application.")
+REQUESTS = Counter("total_website_requests", "Total HTTP requests to the website.")
 
 def create_app():
     app = Flask(__name__)
